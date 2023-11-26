@@ -34,7 +34,9 @@ import android.content.res.Resources;
 import android.graphics.ColorSpace;
 import android.graphics.Point;
 import android.hardware.OverlayProperties;
+import android.hardware.display.IDisplayManager;
 import android.hardware.display.DisplayManager.DisplayListener;
+import android.hardware.display.DisplayManagerInternal;
 import android.hardware.graphics.common.DisplayDecorationSupport;
 import android.media.projection.IMediaProjection;
 import android.media.projection.MediaProjection;
@@ -119,6 +121,9 @@ public final class DisplayManagerGlobal {
     @UnsupportedAppUsage
     private static DisplayManagerGlobal sInstance;
 
+    @UnsupportedAppUsage
+    private static IDisplayManager sDisplayManagerService;
+
     // Guarded by mLock
     private boolean mDispatchNativeCallbacks = false;
     private float mNativeCallbackReportedRefreshRate;
@@ -186,6 +191,18 @@ public final class DisplayManagerGlobal {
                 }
             }
             return sInstance;
+        }
+    }
+
+    @UnsupportedAppUsage
+    public static IDisplayManager getDisplayManagerService() {
+        synchronized (DisplayManagerGlobal.class) {
+            if (sDisplayManagerService == null) {
+                sDisplayManagerService = IDisplayManager.Stub.asInterface(
+                    ServiceManager.getService(Context.DISPLAY_SERVICE)
+                );
+            }
+            return sDisplayManagerService;
         }
     }
 

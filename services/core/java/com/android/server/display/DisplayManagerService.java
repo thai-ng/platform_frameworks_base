@@ -4667,6 +4667,25 @@ public final class DisplayManagerService extends SystemService {
             DisplayManagerService.this.mDisplayModeDirector.requestDisplayModes(
                     token, displayId, modeIds);
         }
+        
+        @Override
+        public void setDisplayOffsets(int displayId, int x, int y) {
+            synchronized (mSyncRoot) {
+                final LogicalDisplay display = mLogicalDisplayMapper.getDisplayLocked(displayId);
+                if (display == null) {
+                    return;
+                }
+                if (display.getDisplayOffsetXLocked() != x
+                        || display.getDisplayOffsetYLocked() != y) {
+                    if (DEBUG) {
+                        Slog.d(TAG, "Display " + displayId + " offset set to ("
+                                + x + ", " + y + ")");
+                    }
+                    display.setDisplayOffsetsLocked(x, y);
+                    scheduleTraversalLocked(false);
+                }
+            }
+        }
     }
 
     private static boolean isValidBrightness(float brightness) {

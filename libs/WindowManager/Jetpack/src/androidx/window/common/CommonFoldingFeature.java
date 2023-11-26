@@ -213,7 +213,7 @@ public final class CommonFoldingFeature {
     private final Rect mRect;
 
     CommonFoldingFeature(int type, @State int state, @NonNull Rect rect) {
-        assertReportableState(state);
+        // assertReportableState(state);
         this.mType = type;
         this.mState = state;
         if (rect.width() == 0 && rect.height() == 0) {

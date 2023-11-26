@@ -765,6 +765,12 @@ public final class DeviceStateProviderImpl implements DeviceStateProvider,
             return configFileFromDataDir;
         }
 
+        final File configFileFromSystemDir = Environment.buildPath(Environment.getRootDirectory(),
+                VENDOR_CONFIG_FILE_PATH, CONFIG_FILE_NAME);
+        if (configFileFromSystemDir .exists()) {
+            return configFileFromSystemDir;
+        }                
+
         final File configFileFromVendorDir = Environment.buildPath(Environment.getVendorDirectory(),
                 VENDOR_CONFIG_FILE_PATH, CONFIG_FILE_NAME);
         if (configFileFromVendorDir.exists()) {

@@ -220,6 +220,9 @@ interface IDisplayManager {
     // Query for DISPLAY_DECORATION support.
     DisplayDecorationSupport getDisplayDecorationSupport(int displayId);
 
+    // set display offsets for logical display
+    void setDisplayOffsets(int displayId, int x, int y);
+
     // This method is to support behavior that was calling hidden APIs. The caller was requesting
     // to set the layerStack after the display was created, which is not something we support in
     // DMS. This should be deleted in V release.

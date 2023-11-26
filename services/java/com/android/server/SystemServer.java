@@ -2951,6 +2951,14 @@ public final class SystemServer implements Dumpable {
         }
         t.traceEnd();
 
+        t.traceBegin("PostureProcessorService");
+        try {
+            startPostureProcessor(context);
+        } catch (Throwable e) {
+            reportWtf("starting " + "com.thain.duo.PostureProcessorService", e);
+        }
+        t.traceEnd();
+
         t.traceBegin("GameManagerService");
         mSystemServiceManager.startService(GameManagerService.Lifecycle.class);
         t.traceEnd();
@@ -3458,6 +3466,13 @@ public final class SystemServer implements Dumpable {
         t.traceBegin("startWearableSensingService");
         mSystemServiceManager.startService(WearableSensingManagerService.class);
         t.traceEnd();
+    }
+
+    private static void startPostureProcessor(Context context) {
+        PackageManagerInternal pm = LocalServices.getService(PackageManagerInternal.class);
+        Intent intent = new Intent();
+        intent.setComponent(ComponentName.unflattenFromString("com.thain.duo/.PostureProcessorService"));
+        context.startServiceAsUser(intent, UserHandle.SYSTEM);
     }
 
     private static void startSystemUi(Context context, WindowManagerService windowManager) {
